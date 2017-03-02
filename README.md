@@ -1,14 +1,15 @@
 #Israel's Army
 
 ## Sinopsis
-El sistema que se implementará deberá contener las herramientas vistas durante el curso,  
-para que un usuario lleve a cabo el proceso de minería de datos. Se sugiere
-tener en la interfaz gráfica los siguiente elementos en el menu :
+El sistema que se implementará deberá contener las herramientas vistas durante el curso, para que un usuario lleve a cabo el proceso de minería de datos. Se sugiere tener en la interfaz gráfica los siguiente elementos en el menu :
 
-**Archivo**: Lectura, guardado y modificación de los conjuntos de datos.
-**Pre-procesamiento**: Procesamiento de limpieza de los datos.
-**Análisis estadístico**: Análisis estadísctico de la información (univariable, bivariable).
-**Aprendizaje máquina**: Algoritmos de aprendizaje máquina
+**Archivo**: Lectura, guardado y modificación de los conjuntos de datos. 
+
+**Pre-procesamiento**: Procesamiento de limpieza de los datos. 
+
+**Análisis estadístico**: Análisis estadísctico de la información (univariable, bivariable). 
+
+**Aprendizaje máquina**: Algoritmos de aprendizaje máquina. 
 
 ## Motivación
 Aplicar las herramientas aprendidas durante el curso Minería de Datos del ciclo 2017-A
