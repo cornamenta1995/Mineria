@@ -1,16 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package driver;
 
-/**
- *
- * @author marlon
- */
+import view.InterfazPrincipal;
+
+
 public class Driver {
-	// Comentario de broma prueba																																																																																																													`
-    // hola
-	
+
+        public static void main(String args[]) {
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazPrincipal().setVisible(true);
+            }
+        });
+    }
+    
 }

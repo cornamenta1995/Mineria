@@ -1,3 +1,6 @@
+package view;
+
+import driver.*;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -9,25 +12,6 @@ public class InterfazPrincipal extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazPrincipal frame = new InterfazPrincipal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public InterfazPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
