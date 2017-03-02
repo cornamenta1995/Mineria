@@ -2,7 +2,6 @@ package driver;
 
 import view.InterfazPrincipal;
 
-
 public class Driver {
 
         public static void main(String args[]) {
