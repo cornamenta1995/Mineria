@@ -1,6 +1,6 @@
 package driver;
 
-import view.InterfazPrincipal;
+import view.Menu;
 
 public class Driver {
 
@@ -8,7 +8,7 @@ public class Driver {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterfazPrincipal().setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }
