@@ -5,6 +5,7 @@ import model.TableTO;
 
 public class Grid extends javax.swing.JPanel {
     private DefaultTableModel modeloTabla;
+    
     public Grid(TableTO miTabla) {
         initComponents();
     }
@@ -20,19 +21,8 @@ public class Grid extends javax.swing.JPanel {
 
         jLabel1.setText("Nombre del Conjunto : ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
-        jTable1.setColumnModel(modeloMetaDatos);
 
         jTextField1.setText("jTextField1");
 
@@ -57,9 +47,9 @@ public class Grid extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(173, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

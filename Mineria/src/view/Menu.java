@@ -1,3 +1,4 @@
+
 package view;
 
 import controller.ControllArchivo;
@@ -6,9 +7,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import model.TableTO;
 
+
 public class Menu extends javax.swing.JFrame {
 
-  
+
     public Menu() {
         initComponents();
         setLocationRelativeTo(null);
@@ -144,6 +146,7 @@ public class Menu extends javax.swing.JFrame {
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
        
     }//GEN-LAST:event_menuSalirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
