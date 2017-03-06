@@ -28,7 +28,7 @@ public class ControllArchivo {
         LinkedList<String> comentarios = new LinkedList<String>();
         LinkedList<Columna> columna = new LinkedList<Columna>();
         LinkedList<Datos> data = new LinkedList<Datos>();
-       
+        int i = 0;
         Iterator<String> iterador = sentencias.iterator();
         Tabla miTabla = new Tabla();
         Columna miColumna;
@@ -94,7 +94,6 @@ public class ControllArchivo {
                     while (iterador.hasNext()) {
                         String line = iterador.next();
                         mat = pat4.matcher(line);
-                        int i = 0;
                         if (mat.find()) {
                             Datos miDato = new Datos();
                             String datos[]  = line.split(",");

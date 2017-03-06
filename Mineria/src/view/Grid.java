@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import model.Columna;
+import model.Datos;
 import model.Tabla;
 
 public class Grid extends javax.swing.JPanel {
@@ -26,8 +27,9 @@ public class Grid extends javax.swing.JPanel {
         LinkedList<Columna>columnas = miTabla.getAtributtes();
         Iterator<Columna> iterador = columnas.iterator();
         Columna miColumna;
-        columnaDatos = new String[columnas.size()];
-        int i = 0;
+        columnaDatos = new String[columnas.size()+1];
+        columnaDatos[0] = "id";
+        int i = 1;
         while(iterador.hasNext()){
             miColumna = iterador.next();
             columnaDatos[i] = miColumna.getNombre();
@@ -50,7 +52,28 @@ public class Grid extends javax.swing.JPanel {
         txtMissing.setText(missing);
         txtRelation.setText(relation);
         setFilas();
+        setFilasDatos();
         setComentarios();
+    }
+    
+    private void setFilasDatos(){
+        LinkedList<Datos> data = miTabla.getData();
+        Iterator<Datos> iterador = data.iterator();
+        int e = columnaDatos.length;
+        Object[] datos = new Object[e+1];
+        Datos miDato;
+        
+        while(iterador.hasNext()){
+            
+            miDato = iterador.next();
+            String s[] = miDato.getDatos();
+            datos[0] = miDato.getIndex();
+            for(int i = 1; i < e; i++){
+                datos[i] = s[i-1];
+            }
+            modeloTablaDatos.addRow(datos);
+        }
+        
     }
     
      private void setComentarios() {
