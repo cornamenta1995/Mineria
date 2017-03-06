@@ -5,8 +5,7 @@ import controller.ControllArchivo;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import model.TableTO;
-
+import model.Tabla;
 
 public class Menu extends javax.swing.JFrame {
 
@@ -124,19 +123,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void menuCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCargarActionPerformed
        try{
-            
-            JFileChooser file=new JFileChooser();
-            file.showOpenDialog(this);
-            File archivo = file.getSelectedFile();
-            
             ControllArchivo miControl = new ControllArchivo();
-            TableTO miTabla = miControl.validarArchivo(archivo);
-            
-            
-            if(miTabla == null){
-                JOptionPane.showMessageDialog(null,"Error en el formato del archivo");
+            boolean estadoArch = miControl.cargarArchivo();
+            if(!estadoArch){
+                JOptionPane.showMessageDialog(null,"Error en el archivo");
             }else{
-                contenedor.add( new Grid(miTabla));
+                
             }
        }catch(Exception e){
            JOptionPane.showMessageDialog(null,"Error al cargar archivo");

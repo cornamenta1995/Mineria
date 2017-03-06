@@ -1,12 +1,12 @@
 package view;
 
 import javax.swing.table.DefaultTableModel;
-import model.TableTO;
+import model.Tabla;
 
 public class Grid extends javax.swing.JPanel {
     private DefaultTableModel modeloTabla;
     
-    public Grid(TableTO miTabla) {
+    public Grid(Tabla miTabla) {
         initComponents();
     }
     
