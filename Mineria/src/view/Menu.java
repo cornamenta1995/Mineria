@@ -14,6 +14,7 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Stinky Pete");
+        setResizable(false);
     }
 
 
@@ -50,7 +51,7 @@ public class Menu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -136,7 +137,8 @@ public class Menu extends javax.swing.JFrame {
                 contenedor.add("Grid de Datos",miGrid);
             }
        }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Error al cargar archivo");
+           e.printStackTrace();
+            //  JOptionPane.showMessageDialog(null,"Error al cargar archivo");
        }
     }//GEN-LAST:event_menuCargarActionPerformed
 
