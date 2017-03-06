@@ -60,7 +60,7 @@ public class Grid extends javax.swing.JPanel {
         LinkedList<Datos> data = miTabla.getData();
         Iterator<Datos> iterador = data.iterator();
         int e = columnaDatos.length;
-        Object[] datos = new Object[e+1];
+        Object[] datos = new Object[e];
         Datos miDato;
         
         while(iterador.hasNext()){
