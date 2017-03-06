@@ -29,6 +29,7 @@ public class ControllArchivo {
         LinkedList<Columna> columna = new LinkedList<Columna>();
         LinkedList<Datos> data = new LinkedList<Datos>();
         int i = 0;
+        int columnas = 0;
         Iterator<String> iterador = sentencias.iterator();
         Tabla miTabla = new Tabla();
         Columna miColumna;
@@ -79,7 +80,7 @@ public class ControllArchivo {
                     miColumna.setNombre(datos[1]);
                     miColumna.setExpresion(datos[3]);
                     miColumna.setTipo(dato);
-
+                    columnas++;
                     columna.add(miColumna);
                 } else if (opc == 'm' && index > 1) {
 
@@ -88,30 +89,52 @@ public class ControllArchivo {
 
                 } else if (opc == 'm' && index == 1) {
                     miTabla.setMissingValue("NULL");
-                } else if (opc == 'd') {
-                    Pattern pat4 = Pattern.compile("^[a-zA-Z0-9]");
-
-                    while (iterador.hasNext()) {
-                        String line = iterador.next();
-                        mat = pat4.matcher(line);
-                        if (mat.find()) {
-                            Datos miDato = new Datos();
-                            String datos[]  = line.split(",");
-                            
-                            miDato.setIndex(i);
-                            miDato.setDatos(datos);
-                            
-                            data.add(miDato);
-                            i++;
-                        }
-                    }
                 }
             }
         }
+
+        Pattern pat4 = Pattern.compile("^[a-zA-Z0-9]|[a-zA-Z0-9],");
+        iterador = sentencias.iterator();
+        String aux[];
+        
+        while (iterador.hasNext()) {
+            String line = iterador.next();
+            mat = pat4.matcher(line);
+            if (mat.find()) {
+                Datos miDato = new Datos();
+                
+                String datos[] = line.split(",",columnas);
+                
+                if(datos.length < columnas){
+                    
+                    aux = new String[columnas];
+                    
+                    for(int a = 0; a < datos.length; a++){
+                        if(datos[a] != null){
+                            aux[a] = datos[a];
+                        }
+                    }
+                    
+                    for(int a = 0; a < aux.length; a++){
+                        if(aux[a] == null){
+                            aux[a] = miTabla.getMissingValue();
+                        }
+                    }
+                    datos = aux;
+                }
+                
+                miDato.setIndex(i);
+                miDato.setDatos(datos);
+
+                data.add(miDato);
+                i++;
+            }
+        }
+
         miTabla.setData(data);
         miTabla.setAtributtes(columna);
         miTabla.setComentarios(comentarios);
-        
+
         return miTabla;
     }
     
