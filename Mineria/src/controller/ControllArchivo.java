@@ -23,7 +23,7 @@ public class ControllArchivo {
     public ControllArchivo() {
     }
 
-    private Tabla analizar() {
+    public Tabla analizar() {
 
         LinkedList<String> comentarios = new LinkedList<String>();
         LinkedList<Columna> columna = new LinkedList<Columna>();
