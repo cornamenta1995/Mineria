@@ -30,7 +30,7 @@ public class ControllArchivo {
         LinkedList<Columna> columna = new LinkedList<Columna>();
         LinkedList<Datos> data = new LinkedList<Datos>();
 
-        int i = 0;
+        int i = 1;
 
         Iterator<String> iterador = sentencias.iterator();
 
