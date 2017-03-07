@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Columna;
 import model.Datos;
 import model.Tabla;
@@ -28,11 +29,11 @@ public class ControllArchivo {
         LinkedList<String> comentarios = new LinkedList<String>();
         LinkedList<Columna> columna = new LinkedList<Columna>();
         LinkedList<Datos> data = new LinkedList<Datos>();
-       
+
         int i = 0;
-        
+
         Iterator<String> iterador = sentencias.iterator();
-        
+
         Tabla miTabla = new Tabla();
         Columna miColumna;
 
@@ -52,16 +53,16 @@ public class ControllArchivo {
         iterador = sentencias.iterator();
         Pattern pat2 = Pattern.compile("^@[a-z]");
         /*Localizar los @ en las cadenas*/
-        
+
         while (iterador.hasNext()) {
             String linea = iterador.next();
             mat = pat2.matcher(linea);
 
             if (mat.find()) {
-                
+
                 Pattern pat3 = Pattern.compile("%");
                 Matcher aux1 = pat3.matcher(linea);
-                
+
                 /*Si existe un comentario en la línea lo va a borrar*/
                 if (aux1.find()) {
                     linea = limpiar(linea);
@@ -87,7 +88,7 @@ public class ControllArchivo {
                     miColumna.setExpresion(datos[3]);
                     miColumna.setTipo(dato);
                     columna.add(miColumna);
-                    
+
                 } else if (opc == 'm' && index > 1) {
 
                     String datos[] = linea.split(" ", 2);
@@ -103,34 +104,34 @@ public class ControllArchivo {
         iterador = sentencias.iterator();
         String aux[];
         int columnas = columna.size();
-        
+
         while (iterador.hasNext()) {
-            
+
             String line = iterador.next();
             mat = pat4.matcher(line);
             /*Busca los datos de el conjunto*/
-            
+
             if (mat.find()) {
                 Datos miDato = new Datos();
-               
+
                 String datos[] = line.split(",");
-                
-                if(datos.length < columnas){
-                    
+
+                if (datos.length < columnas) {
+
                     aux = new String[columnas];
-                    
-                    for(int a = 0; a < datos.length; a++){
-                            aux[a] = datos[a];
+
+                    for (int a = 0; a < datos.length; a++) {
+                        aux[a] = datos[a];
                     }
-                    
-                    for(int a = 0; a < columnas; a++){
-                        if(aux[a] == null ){
+
+                    for (int a = 0; a < columnas; a++) {
+                        if (aux[a] == null) {
                             aux[a] = miTabla.getMissingValue();
                         }
-                    }         
+                    }
                     datos = aux;
                 }
-                
+
                 miDato.setIndex(i);
                 miDato.setDatos(datos);
 
@@ -145,33 +146,39 @@ public class ControllArchivo {
 
         return miTabla;
     }
-    
+
     public boolean cargarArchivo() {
 
         try {
             JFileChooser file = new JFileChooser();
-            file.showOpenDialog(null);
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
 
-            File archivo = file.getSelectedFile();
-            FileReader fr = new FileReader(archivo);
-            
-            BufferedReader br = new BufferedReader(fr);
-            sentencias = new LinkedList<String>();
-            String linea = br.readLine();
+            file.setFileFilter(filtro);
+            int seleccion= file.showOpenDialog(null);
 
-            while (linea != null) {
-                linea = linea.trim();
-                sentencias.add(linea);
-                linea = br.readLine();
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                File archivo = file.getSelectedFile();
+
+                FileReader fr = new FileReader(archivo);
+
+                BufferedReader br = new BufferedReader(fr);
+                sentencias = new LinkedList<String>();
+                String linea = br.readLine();
+
+                while (linea != null) {
+                    linea = linea.trim();
+                    sentencias.add(linea);
+                    linea = br.readLine();
+                }
+
+                br.close();
+                fr.close();
+
+                if (!sentencias.isEmpty()) {
+                    return true;
+                }
+
             }
-
-            br.close();
-            fr.close();
-
-            if (!sentencias.isEmpty()) {
-                return true;
-            } 
-            
 
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "No se encontró archivo");

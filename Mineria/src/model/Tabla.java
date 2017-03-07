@@ -10,7 +10,9 @@ public class Tabla {
     private String missingValue;
     private LinkedList<Columna> atributtes;
     private LinkedList<Datos> data;
-
+    private int numeroError;
+    
+    
     public Tabla(String relation, String missingValue, LinkedList<Columna> atributtes) {
         this.relation = relation;
         this.missingValue = missingValue;
@@ -58,6 +60,14 @@ public class Tabla {
 
     public void setData(LinkedList<Datos> data) {
         this.data = data;
+    }
+
+    public int getNumeroError() {
+        return numeroError;
+    }
+
+    public void setNumeroError(int numeroError) {
+        this.numeroError = numeroError;
     }
     
 }

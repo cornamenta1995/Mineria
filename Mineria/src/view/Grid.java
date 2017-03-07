@@ -69,7 +69,12 @@ public class Grid extends javax.swing.JPanel {
             String s[] = miDato.getDatos();
             datos[0] = miDato.getIndex();
             for(int i = 1; i < e; i++){
-                datos[i] = s[i-1];
+                if(s[i-1].isEmpty()){
+                    datos[i] = miTabla.getMissingValue();
+                }else{
+                    datos[i] = s[i-1];
+                }
+                
             }
             modeloTablaDatos.addRow(datos);
         }
