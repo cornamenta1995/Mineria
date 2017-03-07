@@ -51,14 +51,13 @@ public class Menu extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jMenuBar1.setBackground(java.awt.Color.lightGray);
 
         jMenu1.setBackground(new java.awt.Color(134, 56, 56));
-        jMenu1.setForeground(java.awt.Color.orange);
         jMenu1.setText("Archivo");
         jMenu1.setFont(new java.awt.Font("Cabin", 1, 18)); // NOI18N
 
@@ -114,14 +113,6 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
-        
-    }//GEN-LAST:event_menuGuardarActionPerformed
-
-    private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
-       
-    }//GEN-LAST:event_menuGuardarComoActionPerformed
-
     private void menuCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCargarActionPerformed
         contenedor.removeAll();
         try{
@@ -131,6 +122,8 @@ public class Menu extends javax.swing.JFrame {
                 Tabla miTabla = miControl.analizar();
                 Grid miGrid = new Grid(miTabla);
                 contenedor.add("Grid de Datos",miGrid);
+            }else{
+                contenedor.add(new Presentacion());
             }
        }catch(Exception e){
            e.printStackTrace();
@@ -138,8 +131,16 @@ public class Menu extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_menuCargarActionPerformed
 
+    private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
+
+    }//GEN-LAST:event_menuGuardarActionPerformed
+
+    private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
+
+    }//GEN-LAST:event_menuGuardarComoActionPerformed
+
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
-       
+
     }//GEN-LAST:event_menuSalirActionPerformed
 
 

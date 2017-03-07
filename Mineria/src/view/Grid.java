@@ -1,8 +1,11 @@
 package view;
 
+import controller.MiRender;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.table.DefaultTableModel;
 import model.Columna;
 import model.Datos;
@@ -21,7 +24,8 @@ public class Grid extends javax.swing.JPanel {
         modeloTabla = new DefaultTableModel(null,getColumnasAtributos());
         modeloTablaDatos = new DefaultTableModel(null,getColumnasDatos());
         initComponents();
-     
+        tablaDatos.getTableHeader().setReorderingAllowed(false);
+        tblColumnas.getTableHeader().setReorderingAllowed(false);
         cargar();
     }
     
@@ -60,6 +64,7 @@ public class Grid extends javax.swing.JPanel {
         setFilas();
         setFilasDatos();
         setComentarios();
+        tablaDatos.setDefaultRenderer(Object.class, new MiRender(miTabla.getAtributtes()));
     }
     
     private void setFilasDatos(){
@@ -77,17 +82,19 @@ public class Grid extends javax.swing.JPanel {
             for(int i = 1; i < e; i++){
                 if(s[i-1].isEmpty()){
                     datos[i] = miTabla.getMissingValue();
+                    s[i-1] = miTabla.getMissingValue();
                 }else{
                     datos[i] = s[i-1];
                 }
                 
             }
+            miDato.setDatos(s);
             modeloTablaDatos.addRow(datos);
         }
         
     }
     
-     private void setComentarios() {
+    private void setComentarios() {
         LinkedList<String>comentarios = miTabla.getComentarios();
         Iterator<String> iterador = comentarios.iterator();
         String cadena = "";
@@ -97,7 +104,6 @@ public class Grid extends javax.swing.JPanel {
         }
         txtComentarios.setText(cadena);
     }
-    
     private void setFilas(){
         LinkedList<Columna>columnas = miTabla.getAtributtes();
         Iterator<Columna> iterador = columnas.iterator();
@@ -178,7 +184,7 @@ public class Grid extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblConjunto, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -191,12 +197,12 @@ public class Grid extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblInstancias)
                             .addComponent(txtInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
