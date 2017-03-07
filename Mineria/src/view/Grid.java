@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +21,7 @@ public class Grid extends javax.swing.JPanel {
         modeloTabla = new DefaultTableModel(null,getColumnasAtributos());
         modeloTablaDatos = new DefaultTableModel(null,getColumnasDatos());
         initComponents();
+     
         cargar();
     }
     
@@ -51,6 +53,10 @@ public class Grid extends javax.swing.JPanel {
         String missing = miTabla.getMissingValue();
         txtMissing.setText(missing);
         txtRelation.setText(relation);
+        
+        int elemento = miTabla.getData().size();
+        txtInstancia.setDisabledTextColor(Color.black);
+        txtInstancia.setText(String.valueOf(elemento));
         setFilas();
         setFilasDatos();
         setComentarios();
@@ -122,6 +128,8 @@ public class Grid extends javax.swing.JPanel {
         txtComentarios = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
+        lblInstancias = new javax.swing.JLabel();
+        txtInstancia = new javax.swing.JTextField();
 
         lblConjunto.setText("Nombre del Conjunto : ");
 
@@ -137,6 +145,10 @@ public class Grid extends javax.swing.JPanel {
         tablaDatos.setModel(modeloTablaDatos);
         jScrollPane3.setViewportView(tablaDatos);
 
+        lblInstancias.setText("Instancias :");
+
+        txtInstancia.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,14 +160,16 @@ public class Grid extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 38, Short.MAX_VALUE)
+                                .addGap(0, 32, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblConjunto, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblValue, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblConjunto, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtMissing, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtRelation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(lblInstancias, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtMissing, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(txtRelation, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(txtInstancia)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -164,9 +178,8 @@ public class Grid extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblConjunto, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtRelation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -175,10 +188,15 @@ public class Grid extends javax.swing.JPanel {
                             .addComponent(lblValue)
                             .addComponent(txtMissing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblInstancias)
+                            .addComponent(txtInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -188,10 +206,12 @@ public class Grid extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblConjunto;
+    private javax.swing.JLabel lblInstancias;
     private javax.swing.JLabel lblValue;
     private javax.swing.JTable tablaDatos;
     private javax.swing.JTable tblColumnas;
     private javax.swing.JTextArea txtComentarios;
+    private javax.swing.JTextField txtInstancia;
     private javax.swing.JTextField txtMissing;
     private javax.swing.JTextField txtRelation;
     // End of variables declaration//GEN-END:variables

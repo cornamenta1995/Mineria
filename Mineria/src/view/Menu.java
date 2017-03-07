@@ -15,6 +15,7 @@ public class Menu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Stinky Pete");
         setResizable(false);
+        contenedor.add(new Presentacion());
     }
 
 
@@ -50,8 +51,7 @@ public class Menu extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

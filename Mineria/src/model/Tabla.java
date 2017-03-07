@@ -12,7 +12,6 @@ public class Tabla {
     private LinkedList<Datos> data;
     private int numeroError;
     
-    
     public Tabla(String relation, String missingValue, LinkedList<Columna> atributtes) {
         this.relation = relation;
         this.missingValue = missingValue;
