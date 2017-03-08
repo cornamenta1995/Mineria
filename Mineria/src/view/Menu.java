@@ -139,6 +139,8 @@ public class Menu extends javax.swing.JFrame {
     private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
         //se abre jFileChooser
         JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
+        fc.addChoosableFileFilter(filtro);
         String nombre = "";
         try{
             fc.showSaveDialog(this);
