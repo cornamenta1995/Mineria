@@ -133,10 +133,16 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuCargarActionPerformed
 
     private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
-
+        /*En la opcion guardar sobrescribira el archivo cargado sin preguntar 
+        alguna otra cosa al usuario.
+        */
     }//GEN-LAST:event_menuGuardarActionPerformed
 
     private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
+        /*En este option se abrira el Jfilechooser en el cual el usuario podra elegir en donde guardarlo
+        asi como con el nombre que desee aunque solo se permitira el tipo de archivo .txt
+        */
+
         //se abre jFileChooser
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
@@ -156,6 +162,11 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuGuardarComoActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+        /** Aqui se pono el salir en el cual primero se pregunta con un optionPane
+         * si desea guardar los cambios o no si no fuera asi se cierra el programa, pero
+         * si el usuario decide guardarlos se abrira un JfileChooser en el cual le dara la
+         * option de elegir en donde guardarlo y con que nombre.
+         */
         int resp = JOptionPane.showConfirmDialog(null, "Deseas Guardar los cambios?");
         if (JOptionPane.OK_OPTION == resp) {
             JFileChooser fc = new JFileChooser();
