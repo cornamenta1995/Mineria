@@ -171,6 +171,7 @@ public class Grid extends javax.swing.JPanel {
         btnEliminarInstancia = new javax.swing.JButton();
         btnErrores = new javax.swing.JButton();
         btnAplicar = new javax.swing.JButton();
+        btnAgregarInstancia = new javax.swing.JButton();
 
         lblConjunto.setText("Nombre del Conjunto : ");
 
@@ -218,6 +219,13 @@ public class Grid extends javax.swing.JPanel {
             }
         });
 
+        btnAgregarInstancia.setText("Agregar Instancia");
+        btnAgregarInstancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarInstanciaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,6 +263,8 @@ public class Grid extends javax.swing.JPanel {
                                 .addComponent(btnErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
                                 .addComponent(btnEliminarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAgregarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -286,7 +296,8 @@ public class Grid extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminarInstancia)
-                    .addComponent(btnErrores))
+                    .addComponent(btnErrores)
+                    .addComponent(btnAgregarInstancia))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
@@ -354,6 +365,28 @@ public class Grid extends javax.swing.JPanel {
         tablaDatos.setDefaultRenderer(Object.class, render);
     }//GEN-LAST:event_btnAplicarActionPerformed
 
+    private void btnAgregarInstanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInstanciaActionPerformed
+        int i = tablaDatos.getColumnCount();
+        Object datos[] = new Object[i];
+        datos[0] = tablaDatos.getRowCount()+1;
+        int j = 1;
+        
+        String respuesta = "";
+        while(j < i ){
+           respuesta = JOptionPane.showInputDialog(null, "Ingrese valor para "+ tablaDatos.getColumnName(j));
+           
+           if(respuesta != null && !respuesta.trim().isEmpty()){
+               respuesta = respuesta.trim();
+               datos[j] = respuesta;
+           }else{
+               datos[j] = miTabla.getMissingValue();
+           }
+           j++;
+        }
+        
+        modeloTablaDatos.addRow(datos);
+    }//GEN-LAST:event_btnAgregarInstanciaActionPerformed
+
     public void generarArchivo() {
         File miArchivo = new File(rutaArchivo);
 
@@ -414,6 +447,7 @@ public class Grid extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarInstancia;
     private javax.swing.JButton btnAplicar;
     private javax.swing.JButton btnEliminarColumna;
     private javax.swing.JButton btnEliminarInstancia;
