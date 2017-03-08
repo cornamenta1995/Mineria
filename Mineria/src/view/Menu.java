@@ -169,7 +169,6 @@ public class Menu extends javax.swing.JFrame {
 
                 }
             } finally {
-
             }
         } else if(JOptionPane.NO_OPTION == resp) {
             System.exit(EXIT_ON_CLOSE);
