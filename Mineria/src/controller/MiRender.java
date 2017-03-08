@@ -18,31 +18,26 @@ public class MiRender extends DefaultTableCellRenderer {
         this.atributtes = atributtes;
     }
     
-    
     public Component getTableCellRendererComponent(JTable table,
             Object value,
             boolean isSelected,
             boolean hasFocus,
             int row,
             int column) {
-        JLabel cell = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        
-        System.out.println(row + " "+column+" "+value);
-        
-           if(column != 0){
-            String expresion = atributtes.get(column-1).getExpresion();
-            
-              Matcher mat;
-              Pattern pat1 = Pattern.compile(expresion);
-              
-              mat = pat1.matcher(String.valueOf(value));
+        JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        cell.setForeground(Color.BLACK);
+        cell.setBackground(Color.WHITE);
+        if (column != 0) {
+            String expresion = atributtes.get(column - 1).getExpresion();
+
+            Matcher mat;
+            Pattern pat1 = Pattern.compile(expresion);
+
+            mat = pat1.matcher(String.valueOf(value));
 
             if (!mat.matches()) {
-                  cell.setForeground(Color.WHITE);
-                  cell.setBackground(Color.RED);
-            }else{
-                  cell.setForeground(Color.BLACK);
-                  cell.setBackground(Color.WHITE);
+                cell.setForeground(Color.WHITE);
+                cell.setBackground(Color.RED);
             }
         }
 

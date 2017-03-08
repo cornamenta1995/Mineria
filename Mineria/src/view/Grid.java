@@ -24,9 +24,17 @@ public class Grid extends javax.swing.JPanel {
         modeloTabla = new DefaultTableModel(null,getColumnasAtributos());
         modeloTablaDatos = new DefaultTableModel(null,getColumnasDatos());
         initComponents();
+        btnEliminarInstancia.setVisible(false);
         tablaDatos.getTableHeader().setReorderingAllowed(false);
         tblColumnas.getTableHeader().setReorderingAllowed(false);
         cargar();
+        
+          tablaDatos.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseClicked(java.awt.event.MouseEvent e){
+                    btnEliminarInstancia.setVisible(true);
+            }
+        });
+        
     }
     
     private void setColumnas(){
@@ -136,6 +144,10 @@ public class Grid extends javax.swing.JPanel {
         tablaDatos = new javax.swing.JTable();
         lblInstancias = new javax.swing.JLabel();
         txtInstancia = new javax.swing.JTextField();
+        btnAgregarColumna = new javax.swing.JButton();
+        btnEliminarColumna = new javax.swing.JButton();
+        btnEliminarInstancia = new javax.swing.JButton();
+        btnAgregarInstancia = new javax.swing.JButton();
 
         lblConjunto.setText("Nombre del Conjunto : ");
 
@@ -154,6 +166,34 @@ public class Grid extends javax.swing.JPanel {
         lblInstancias.setText("Instancias :");
 
         txtInstancia.setEnabled(false);
+
+        btnAgregarColumna.setText("Agregar Columna");
+        btnAgregarColumna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarColumnaActionPerformed(evt);
+            }
+        });
+
+        btnEliminarColumna.setText("Eliminar Columna");
+        btnEliminarColumna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarColumnaActionPerformed(evt);
+            }
+        });
+
+        btnEliminarInstancia.setText("Eliminar instancia");
+        btnEliminarInstancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarInstanciaActionPerformed(evt);
+            }
+        });
+
+        btnAgregarInstancia.setText("Agregar Instancia");
+        btnAgregarInstancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarInstanciaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -178,7 +218,16 @@ public class Grid extends javax.swing.JPanel {
                                     .addComponent(txtInstancia)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAgregarColumna, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminarColumna, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,13 +250,42 @@ public class Grid extends javax.swing.JPanel {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregarColumna)
+                    .addComponent(btnEliminarColumna)
+                    .addComponent(btnAgregarInstancia)
+                    .addComponent(btnEliminarInstancia))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAgregarColumnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarColumnaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarColumnaActionPerformed
+
+    private void btnEliminarColumnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarColumnaActionPerformed
+        
+    }//GEN-LAST:event_btnEliminarColumnaActionPerformed
+
+    private void btnAgregarInstanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInstanciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarInstanciaActionPerformed
+
+    private void btnEliminarInstanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarInstanciaActionPerformed
+        modeloTablaDatos = (DefaultTableModel) tablaDatos.getModel();
+        modeloTablaDatos.removeRow(tablaDatos.getSelectedRow());
+        modeloTablaDatos = null;
+        btnEliminarInstancia.setVisible(false);
+    }//GEN-LAST:event_btnEliminarInstanciaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarColumna;
+    private javax.swing.JButton btnAgregarInstancia;
+    private javax.swing.JButton btnEliminarColumna;
+    private javax.swing.JButton btnEliminarInstancia;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
