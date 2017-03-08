@@ -156,7 +156,25 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuGuardarComoActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+        int resp = JOptionPane.showConfirmDialog(null, "Deseas Guardar los cambios?");
+        if (JOptionPane.OK_OPTION == resp) {
+            JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
+            fc.addChoosableFileFilter(filtro);
+            String nombre = "";
+            try {
+                fc.showSaveDialog(this);
+                File guardar = fc.getSelectedFile();
+                if (guardar != null) {
 
+                }
+            } finally {
+
+            }
+        } else if(JOptionPane.NO_OPTION == resp) {
+            System.exit(EXIT_ON_CLOSE);
+        }
+        
     }//GEN-LAST:event_menuSalirActionPerformed
 
 
