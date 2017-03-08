@@ -16,54 +16,57 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                          <Component id="lblValue" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txtMissing" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="lblInstancias" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtInstancia" min="-2" pref="174" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
+                                  <Component id="lblValue" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="txtMissing" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="lblConjunto" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txtRelation" min="-2" pref="172" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="lblInstancias" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="txtInstancia" min="-2" pref="174" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="lblConjunto" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="txtRelation" min="-2" pref="172" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
+                          <Component id="btnEliminarColumna" alignment="0" min="-2" pref="153" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="317" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="btnAgregarColumna" min="-2" pref="148" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnEliminarColumna" min="-2" pref="153" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnAgregarInstancia" min="-2" pref="144" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnErrores" min="-2" pref="132" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="btnEliminarInstancia" min="-2" pref="142" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btnAplicar" min="-2" pref="243" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="329" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane3" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,11 +90,8 @@
                           <Component id="txtInstancia" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblInstancias" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnAgregarColumna" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEliminarColumna" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnEliminarColumna" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane2" min="-2" pref="118" max="-2" attributes="0"/>
               </Group>
@@ -99,12 +99,14 @@
               <Component id="jScrollPane1" min="-2" pref="105" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAgregarInstancia" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnEliminarInstancia" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnErrores" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" min="-2" pref="151" max="-2" attributes="0"/>
-              <EmptySpace pref="21" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" min="-2" pref="130" max="-2" attributes="0"/>
+              <EmptySpace pref="11" max="32767" attributes="0"/>
+              <Component id="btnAplicar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -181,14 +183,6 @@
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnAgregarColumna">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar Columna"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarColumnaActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="btnEliminarColumna">
       <Properties>
         <Property name="text" type="java.lang.String" value="Eliminar Columna"/>
@@ -205,12 +199,20 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarInstanciaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnAgregarInstancia">
+    <Component class="javax.swing.JButton" name="btnErrores">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar Instancia"/>
+        <Property name="text" type="java.lang.String" value="Mostrar Errores"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarInstanciaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnErroresActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnAplicar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Aplicar Cambios"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAplicarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

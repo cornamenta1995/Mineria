@@ -9,10 +9,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Tabla;
 
 public class Menu extends javax.swing.JFrame {
-
-
+    
+    private ControllArchivo miControl;
+    private Grid miGrid;
+    
     public Menu() {
         initComponents();
+        miControl = new ControllArchivo();
         setLocationRelativeTo(null);
         setTitle("Stinky Pete");
         setResizable(false);
@@ -117,11 +120,13 @@ public class Menu extends javax.swing.JFrame {
     private void menuCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCargarActionPerformed
         contenedor.removeAll();
         try{
-            ControllArchivo miControl = new ControllArchivo();
+            
             boolean estadoArch = miControl.cargarArchivo();
             if(estadoArch){
+                String name = miControl.getNombre();
+                String ruta = miControl.getRuta();
                 Tabla miTabla = miControl.analizar();
-                Grid miGrid = new Grid(miTabla);
+                miGrid = new Grid(miTabla,ruta);
                 contenedor.add("Grid de Datos",miGrid);
             }else{
                 contenedor.add(new Presentacion());
@@ -133,58 +138,54 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuCargarActionPerformed
 
     private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
-        /*En la opcion guardar sobrescribira el archivo cargado sin preguntar 
-        alguna otra cosa al usuario.
-        */
+        String name = miControl.getNombre();
+        String ruta = miControl.getRuta();
+      
+        if (name != null && ruta != null) {
+            miGrid.generarArchivo();
+        }
     }//GEN-LAST:event_menuGuardarActionPerformed
 
     private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
-        /*En este option se abrira el Jfilechooser en el cual el usuario podra elegir en donde guardarlo
-        asi como con el nombre que desee aunque solo se permitira el tipo de archivo .txt
-        */
-
-        //se abre jFileChooser
-        JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
-        fc.addChoosableFileFilter(filtro);
-        String nombre = "";
-        try{
-            fc.showSaveDialog(this);
-            //Se selecciona donde se va a guardar
-            File guardar = fc.getSelectedFile();
-            if(guardar != null){
-                
-            }
-        }
-        finally{
-            
-        }
-    }//GEN-LAST:event_menuGuardarComoActionPerformed
-
-    private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
-        /** Aqui se pono el salir en el cual primero se pregunta con un optionPane
-         * si desea guardar los cambios o no si no fuera asi se cierra el programa, pero
-         * si el usuario decide guardarlos se abrira un JfileChooser en el cual le dara la
-         * option de elegir en donde guardarlo y con que nombre.
-         */
-        int resp = JOptionPane.showConfirmDialog(null, "Deseas Guardar los cambios?");
-        if (JOptionPane.OK_OPTION == resp) {
+        String name = miControl.getNombre();
+        String ruta = miControl.getRuta();
+      
+        if (name != null && ruta != null) {
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
             fc.addChoosableFileFilter(filtro);
             String nombre = "";
             try {
                 fc.showSaveDialog(this);
+           
                 File guardar = fc.getSelectedFile();
                 if (guardar != null) {
-
+                    miGrid.setName(guardar.getName());
+                    miGrid.setRutaArchivo(guardar.getAbsolutePath());
+                    miGrid.generarArchivo();
                 }
-            } finally {
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Algo ocurrió");
             }
-        } else if(JOptionPane.NO_OPTION == resp) {
-            System.exit(EXIT_ON_CLOSE);
         }
-        
+    }//GEN-LAST:event_menuGuardarComoActionPerformed
+
+    private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+        String name = miControl.getNombre();
+        String ruta = miControl.getRuta();
+
+        if (name != null && ruta != null) {
+            int resp = JOptionPane.showConfirmDialog(null, "Deseas Guardar los cambios?");
+            if (JOptionPane.OK_OPTION == resp) {
+                miGrid.generarArchivo();
+                contenedor.removeAll();
+                contenedor.add(new Presentacion());
+            } else if (JOptionPane.NO_OPTION == resp) {
+                contenedor.add(new Presentacion());
+                contenedor.add(new Presentacion());
+            }
+        }
+
     }//GEN-LAST:event_menuSalirActionPerformed
 
 

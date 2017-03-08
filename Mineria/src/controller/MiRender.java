@@ -13,9 +13,11 @@ import model.Columna;
 
 public class MiRender extends DefaultTableCellRenderer {
     private LinkedList<Columna> atributtes;
-    
-    public MiRender(LinkedList<Columna> atributtes) {
+    private String missingValue;
+   
+    public MiRender(LinkedList<Columna> atributtes,String missingValue) {
         this.atributtes = atributtes;
+        this.missingValue = missingValue;
     }
     
     public Component getTableCellRendererComponent(JTable table,
@@ -38,9 +40,11 @@ public class MiRender extends DefaultTableCellRenderer {
             if (!mat.matches()) {
                 cell.setForeground(Color.WHITE);
                 cell.setBackground(Color.RED);
+                cell.setText(missingValue);
             }
         }
 
         return cell;
     }
+    
 }

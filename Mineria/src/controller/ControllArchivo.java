@@ -20,8 +20,28 @@ import model.TipoDato;
 public class ControllArchivo {
 
     private LinkedList<String> sentencias;
+    private String ruta;
+    private String nombre;
 
     public ControllArchivo() {
+        this.nombre = null;
+        this.ruta = null;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Tabla analizar() {
@@ -154,7 +174,7 @@ public class ControllArchivo {
             FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
 
             file.setFileFilter(filtro);
-            int seleccion= file.showOpenDialog(null);
+            int seleccion = file.showOpenDialog(null);
 
             if (seleccion == JFileChooser.APPROVE_OPTION) {
                 File archivo = file.getSelectedFile();
@@ -175,6 +195,8 @@ public class ControllArchivo {
                 fr.close();
 
                 if (!sentencias.isEmpty()) {
+                    nombre = archivo.getName();
+                    ruta = archivo.getAbsolutePath();
                     return true;
                 }
 
