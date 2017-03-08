@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -390,7 +388,7 @@ public class Grid extends javax.swing.JPanel {
                 columnas.add(c);
             }
         }*/
-        
+        miTabla.setMissingValue(txtMissing.getText());
         render = new MiRender(miTabla.getAtributtes(),txtMissing.getText());
         tablaDatos.setDefaultRenderer(Object.class, render);
     }//GEN-LAST:event_btnAplicarActionPerformed
@@ -462,6 +460,7 @@ public class Grid extends javax.swing.JPanel {
             tablaDatos.setValueAt(default_atributo, i, tablaDatos.getColumnCount()-1);
         }
         
+        miTabla.setAtributtes(columna);
         render = new MiRender(columna,txtMissing.getText());
         tablaDatos.setDefaultRenderer(Object.class, render);
     }//GEN-LAST:event_btnAgregarColumnaActionPerformed
