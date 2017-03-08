@@ -5,6 +5,7 @@ import controller.ControllArchivo;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Tabla;
 
 public class Menu extends javax.swing.JFrame {
@@ -136,7 +137,20 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuGuardarActionPerformed
 
     private void menuGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarComoActionPerformed
-
+        //se abre jFileChooser
+        JFileChooser fc = new JFileChooser();
+        String nombre = "";
+        try{
+            fc.showSaveDialog(this);
+            //Se selecciona donde se va a guardar
+            File guardar = fc.getSelectedFile();
+            if(guardar != null){
+                
+            }
+        }
+        finally{
+            
+        }
     }//GEN-LAST:event_menuGuardarComoActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed

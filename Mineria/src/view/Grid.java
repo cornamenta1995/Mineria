@@ -166,7 +166,7 @@ public class Grid extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 32, Short.MAX_VALUE)
+                                .addGap(0, 102, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblConjunto, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblValue, javax.swing.GroupLayout.Alignment.TRAILING)
