@@ -171,6 +171,7 @@ public class Grid extends javax.swing.JPanel {
         btnAplicar = new javax.swing.JButton();
         btnAgregarInstancia = new javax.swing.JButton();
         btnAgregarColumna = new javax.swing.JButton();
+        btnAnalisis = new javax.swing.JButton();
 
         lblConjunto.setText("Nombre del Conjunto : ");
 
@@ -232,6 +233,13 @@ public class Grid extends javax.swing.JPanel {
             }
         });
 
+        btnAnalisis.setText("Análisis de Datos");
+        btnAnalisis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalisisActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -261,16 +269,19 @@ public class Grid extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEliminarColumna, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane3)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(btnAgregarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(153, 153, 153)
+                        .addComponent(btnEliminarInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAplicar, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81)
+                        .addComponent(btnAnalisis, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnErrores, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -299,17 +310,18 @@ public class Grid extends javax.swing.JPanel {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEliminarInstancia)
-                        .addComponent(btnAgregarInstancia)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAplicar)
-                    .addComponent(btnErrores))
+                    .addComponent(btnEliminarInstancia)
+                    .addComponent(btnAgregarInstancia))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAplicar)
+                        .addComponent(btnErrores))
+                    .addComponent(btnAnalisis))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -318,8 +330,7 @@ public class Grid extends javax.swing.JPanel {
         modeloTabla = (DefaultTableModel) tblColumnas.getModel();
         int index = tblColumnas.getSelectedRow() + 1;
         modeloTabla.removeRow(tblColumnas.getSelectedRow());
-        modeloTabla = null;
-
+     
         tablaDatos.removeColumn(tablaDatos.getColumnModel().getColumn(index));
         LinkedList<Columna> columnas = miTabla.getAtributtes();
         columnas.remove(index - 1);
@@ -464,7 +475,39 @@ public class Grid extends javax.swing.JPanel {
         render = new MiRender(columna,txtMissing.getText());
         tablaDatos.setDefaultRenderer(Object.class, render);
     }//GEN-LAST:event_btnAgregarColumnaActionPerformed
+
+    private void btnAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalisisActionPerformed
+        Object columnas[][] = getColumnas() ;
+        Object data[][] = getDatos();
+        new Analizador(columnas,data);
+    }//GEN-LAST:event_btnAnalisisActionPerformed
+    private Object[][] getColumnas(){
+        
+        int nRow = modeloTabla.getRowCount();
+        int nCol = modeloTabla.getColumnCount();
+        Object[][] tabla = new Object[nRow][nCol];
+        
+        for(int i = 0; i < nRow; i++){
+            for(int j = 0; j < nCol; j++){
+                tabla[i][j] = modeloTabla.getValueAt(i, j);
+            }
+        }
+        return tabla;
+    }
     
+    private Object[][] getDatos(){
+                
+        int nRow = modeloTablaDatos.getRowCount();
+        int nCol = modeloTablaDatos.getColumnCount();
+        Object[][] tabla = new Object[nRow][nCol];
+        
+        for(int i = 0; i < nRow; i++){
+            for(int j = 0; j < nCol; j++){
+                tabla[i][j] = modeloTablaDatos.getValueAt(i, j);
+            }
+        }
+        return tabla;
+    }
     private TipoDato obtenerDato(String dato) {
 
         dato = dato.toUpperCase();
@@ -545,6 +588,7 @@ public class Grid extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarColumna;
     private javax.swing.JButton btnAgregarInstancia;
+    private javax.swing.JButton btnAnalisis;
     private javax.swing.JButton btnAplicar;
     private javax.swing.JButton btnEliminarColumna;
     private javax.swing.JButton btnEliminarInstancia;
