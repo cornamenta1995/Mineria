@@ -120,7 +120,7 @@ public class ControllArchivo {
             }
         }
 
-        Pattern pat4 = Pattern.compile("^[a-zA-Z0-9]");
+        Pattern pat4 = Pattern.compile("^[a-zA-Z0-9?]");
         iterador = sentencias.iterator();
         String aux[];
         int columnas = columna.size();

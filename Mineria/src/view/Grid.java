@@ -381,24 +381,6 @@ public class Grid extends javax.swing.JPanel {
 
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         
-        /*LinkedList<Columna> columnas = new LinkedList<Columna>();
-        Columna c; 
-        for(int i = 0; i <tblColumnas.getRowCount(); i++){
-            c = new Columna();
-            for(int j = 0; j < tblColumnas.getColumnCount();j++){
-                String value = String.valueOf(tblColumnas.getValueAt(i, j));
-                
-                if(j == 0){
-                   c.setNombre(value);
-                }else if(j == 1){
-                    TipoDato a = obtenerDato(value);
-                    c.setTipo(a);
-                }else{
-                    c.setExpresion(value);
-                }
-                columnas.add(c);
-            }
-        }*/
         miTabla.setMissingValue(txtMissing.getText());
         render = new MiRender(miTabla.getAtributtes(),txtMissing.getText());
         tablaDatos.setDefaultRenderer(Object.class, render);
@@ -479,7 +461,7 @@ public class Grid extends javax.swing.JPanel {
     private void btnAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalisisActionPerformed
         Object columnas[][] = getColumnas() ;
         Object data[][] = getDatos();
-        new Analizador(columnas,data);
+        new Analizador(columnas,data,miTabla.getMissingValue(), this.tablaDatos);
     }//GEN-LAST:event_btnAnalisisActionPerformed
     private Object[][] getColumnas(){
         

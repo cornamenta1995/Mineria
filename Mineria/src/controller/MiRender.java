@@ -35,12 +35,15 @@ public class MiRender extends DefaultTableCellRenderer {
             Matcher mat;
             Pattern pat1 = Pattern.compile(expresion);
 
-            mat = pat1.matcher(String.valueOf(value));
+            String s = String.valueOf(value);
+            mat = pat1.matcher(s);
 
             if (!mat.matches()) {
                 cell.setForeground(Color.WHITE);
                 cell.setBackground(Color.RED);
-                cell.setText(missingValue);
+                if(s.isEmpty()){
+                    cell.setText(missingValue);
+                }
             }
         }
 

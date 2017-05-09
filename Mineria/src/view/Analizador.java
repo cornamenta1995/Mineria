@@ -1,13 +1,14 @@
 package view;
 
 import java.awt.Color;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
 import javax.swing.JOptionPane;
-import model.Columna;
-import model.Tabla;
+import javax.swing.JTable;
 import model.TipoDato;
 import org.apache.commons.math3.stat.StatUtils;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.FastMath;
 
@@ -17,10 +18,16 @@ public class Analizador extends javax.swing.JFrame {
     private Object data[][];
     private String zscoreText;
     private String minmaxText;
+    private double arreglo[];
+    private Hashtable<Integer,Object> miHash;
+    private String missing;
+    private JTable tabla;
     
-    public Analizador(Object columna[][],Object data[][]) { 
+    public Analizador(Object columna[][],Object data[][], String missingValue, JTable tabla) { 
         this.columna = columna;
         this.data = data;
+        this.tabla = tabla;
+        this.missing = missingValue;
         initComponents();
         setCombo();
         setLocationRelativeTo(null);
@@ -29,6 +36,14 @@ public class Analizador extends javax.swing.JFrame {
         txtMedia.setDisabledTextColor(Color.BLACK);
         txtMediana.setDisabledTextColor(Color.BLACK);
         txtDE.setDisabledTextColor(Color.BLACK);
+        
+        btnDistancia.setEnabled(false);
+        btnChiCuadrada.setEnabled(false);
+        btnZscore.setEnabled(false);
+        btnAplicar.setEnabled(false);
+        btnMinMax.setEnabled(false);
+        btnCorrelacion.setEnabled(false);
+        
         setVisible(true);
     }
     
@@ -36,6 +51,7 @@ public class Analizador extends javax.swing.JFrame {
         for(int i = 0; i < columna.length; i++){
             Object dato = columna[i][0];
             cboDato.addItem(dato);
+            cboAnalisis.addItem(dato);
         }
     }
 
@@ -69,6 +85,7 @@ public class Analizador extends javax.swing.JFrame {
         cboModa = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtPanel = new javax.swing.JTextArea();
+        cboAnalisis = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -107,6 +124,11 @@ public class Analizador extends javax.swing.JFrame {
 
         btnDistancia.setText("Aplicar Distancia Levenshtein");
         btnDistancia.setToolTipText("");
+        btnDistancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDistanciaActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Análisis Bivariable");
 
@@ -127,12 +149,20 @@ public class Analizador extends javax.swing.JFrame {
         btnChiCuadrada.setText("Chi Cuadrada");
 
         btnCorrelacion.setText("Correlacion Lineal");
+        btnCorrelacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorrelacionActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Sustituir Valores Faltantes ");
 
-        cboFaltantes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Media", "Mediana", "Moda", "Variable Global" }));
-
         btnAplicar.setText("Sustituir");
+        btnAplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarActionPerformed(evt);
+            }
+        });
 
         jScrollPane1.setEnabled(false);
 
@@ -141,6 +171,12 @@ public class Analizador extends javax.swing.JFrame {
         txtPanel.setEnabled(false);
         jScrollPane1.setViewportView(txtPanel);
 
+        cboAnalisis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboAnalisisActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout miPanelLayout = new javax.swing.GroupLayout(miPanel);
         miPanel.setLayout(miPanelLayout);
         miPanelLayout.setHorizontalGroup(
@@ -148,7 +184,35 @@ public class Analizador extends javax.swing.JFrame {
             .addGroup(miPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(miPanelLayout.createSequentialGroup()
+                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, miPanelLayout.createSequentialGroup()
+                                .addComponent(lblDato)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboDato, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, miPanelLayout.createSequentialGroup()
+                                .addComponent(lbltipo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblMediana)
+                            .addComponent(lblMedia))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtMediana, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .addComponent(txtMedia))
+                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(miPanelLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(lblDesviacion))
+                            .addGroup(miPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(lblModa)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cboModa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtDE)))
                     .addGroup(miPanelLayout.createSequentialGroup()
                         .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
@@ -156,57 +220,28 @@ public class Analizador extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel1))
                         .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(miPanelLayout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDistancia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(miPanelLayout.createSequentialGroup()
+                                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnMinMax, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cboAnalisis, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, miPanelLayout.createSequentialGroup()
+                                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cboFaltantes, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnChiCuadrada, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(btnAplicar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnCorrelacion, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, miPanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44))
-                            .addGroup(miPanelLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(miPanelLayout.createSequentialGroup()
-                                        .addComponent(btnChiCuadrada, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                                        .addComponent(btnCorrelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(miPanelLayout.createSequentialGroup()
-                                        .addComponent(btnMinMax, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnZscore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(miPanelLayout.createSequentialGroup()
-                                        .addComponent(cboFaltantes, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnAplicar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                    .addGroup(miPanelLayout.createSequentialGroup()
-                        .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, miPanelLayout.createSequentialGroup()
-                                    .addComponent(lblDato)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cboDato, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, miPanelLayout.createSequentialGroup()
-                                    .addComponent(lbltipo)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(miPanelLayout.createSequentialGroup()
-                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblMediana)
-                                    .addComponent(lblMedia))
-                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(miPanelLayout.createSequentialGroup()
-                                        .addGap(12, 12, 12)
-                                        .addComponent(txtMediana))
-                                    .addGroup(miPanelLayout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(txtMedia, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(34, 34, 34)
-                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblModa)
-                                    .addComponent(lblDesviacion))
-                                .addGap(18, 18, 18)
-                                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cboModa, 0, 95, Short.MAX_VALUE)
-                                    .addComponent(txtDE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(btnZscore, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(40, 40, 40))
         );
         miPanelLayout.setVerticalGroup(
             miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,38 +249,37 @@ public class Analizador extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cboDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDato))
+                    .addComponent(lblDato)
+                    .addComponent(cboModa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblModa)
+                    .addComponent(txtMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMedia))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbltipo))
-                .addGap(18, 18, 18)
-                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMedia)
-                    .addComponent(txtMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblModa)
-                    .addComponent(cboModa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMediana)
-                    .addComponent(txtMediana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbltipo)
                     .addComponent(txtDE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDesviacion))
+                    .addComponent(lblDesviacion)
+                    .addComponent(txtMediana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMediana))
                 .addGap(18, 18, 18)
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(btnMinMax)
                     .addComponent(btnZscore))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(btnDistancia))
+                    .addComponent(btnDistancia)
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
+                    .addComponent(cboAnalisis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnChiCuadrada)
                     .addComponent(btnCorrelacion))
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addGroup(miPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cboFaltantes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,13 +293,15 @@ public class Analizador extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(miPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(miPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(miPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 12, Short.MAX_VALUE)
+                .addComponent(miPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -275,9 +311,20 @@ public class Analizador extends javax.swing.JFrame {
          return (str.matches("[+-]?\\d*(\\.\\d+)?") && str.equals("")==false);
     }
     private void configNumerico(int i){
-        cboModa.removeAllItems();
+  
+        cboFaltantes.addItem("Media");
+        cboFaltantes.addItem("Mediana");
+        cboFaltantes.addItem("Moda");
+        cboFaltantes.addItem("Variable Global");
+        
         btnDistancia.setEnabled(false);
-        double arreglo[] = new double[data.length];
+        btnChiCuadrada.setEnabled(false);
+        btnZscore.setEnabled(true);
+        btnAplicar.setEnabled(true);
+        btnMinMax.setEnabled(true);
+        btnCorrelacion.setEnabled(true);
+      
+        arreglo = new double[data.length];
         DescriptiveStatistics valores = new DescriptiveStatistics();
         for(int j = 0; j < arreglo.length; j++){
             String dato = String.valueOf(data[j][i]); 
@@ -311,7 +358,7 @@ public class Analizador extends javax.swing.JFrame {
        
        for(int j = 0; j < arreglo.length; j++){
            num = ((arreglo[j] - min)/(max-min));
-           minmaxText+="Dato : "+arreglo[0]+" Min-Max : "+num+"\n";
+           minmaxText+="Dato : "+arreglo[j]+" Min-Max : "+num+"\n";
        }
        
        
@@ -324,6 +371,11 @@ public class Analizador extends javax.swing.JFrame {
     private void cboDatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboDatoActionPerformed
         int i = cboDato.getSelectedIndex();
         txtPanel.setText("");
+        txtMedia.setText("");
+        txtMediana.setText("");
+        txtDE.setText("");
+        cboFaltantes.removeAllItems();
+        cboModa.removeAllItems();
         TipoDato tipo = (TipoDato) columna[i][1];
         txtTipo.setText(tipo.toString());
         
@@ -332,18 +384,147 @@ public class Analizador extends javax.swing.JFrame {
                 configNumerico(i+1);
                 break;
             case "BOLEANO":
-                  
+                configurarBoleano(i+1);
                 break;
             case "ORDINAL":
-               
-                break;
-            case "FECHA":
+               configurarOrdinal(i+1);
                 break;
             case "NOMINAL":
+                configurarNominal(i+1);
                 break;
         }
-
     }//GEN-LAST:event_cboDatoActionPerformed
+  
+    private void configurarNominal(int i) {
+        btnDistancia.setEnabled(true);
+        btnChiCuadrada.setEnabled(true);
+        btnZscore.setEnabled(false);
+        btnAplicar.setEnabled(true);
+        btnMinMax.setEnabled(false);
+        btnCorrelacion.setEnabled(false);
+        
+        cboFaltantes.addItem("Mediana");
+        cboFaltantes.addItem("Moda");
+        cboFaltantes.addItem("Variable Global");
+
+        miHash = new Hashtable<Integer, Object>();
+        DescriptiveStatistics valores = new DescriptiveStatistics();
+        double aux[] = new double[data.length];
+        for (int j = 0; j < aux.length; j++) {
+            String dato = String.valueOf(data[j][i]);
+            if (!isNumeric(dato) && !dato.trim().isEmpty()) {
+                aux[j] = dato.hashCode();
+                miHash.put(dato.hashCode(), dato);
+            } else {
+                aux[j] = missing.hashCode();
+            }
+        }
+
+        double moda[] = StatUtils.mode(aux);
+        int index = 0;
+        for (int j = 0; j < moda.length; j++) {
+            int key = (int) moda[j];
+            if (key != missing.hashCode()) {
+                valores.addValue(key);
+                String m = String.valueOf(miHash.get(key));
+                index++;
+                cboModa.addItem(m);
+            }
+        }
+
+        if (index != 0) {
+            int key = (int) valores.getElement(index / 2);
+            String m = String.valueOf(miHash.get(key));
+            txtMediana.setText(m);
+        }
+    }
+
+    private void configurarBoleano(int i) {
+        btnDistancia.setEnabled(true);
+        btnChiCuadrada.setEnabled(false);
+        btnZscore.setEnabled(false);
+        btnAplicar.setEnabled(true);
+        btnMinMax.setEnabled(false);
+        btnCorrelacion.setEnabled(false);
+        
+        cboFaltantes.addItem("Mediana");
+        cboFaltantes.addItem("Moda");
+        cboFaltantes.addItem("Variable Global");
+
+        miHash = new Hashtable<Integer, Object>();
+        DescriptiveStatistics valores = new DescriptiveStatistics();
+        double aux[] = new double[data.length];
+        for (int j = 0; j < aux.length; j++) {
+            String dato = String.valueOf(data[j][i]);
+            if (!isNumeric(dato) && !dato.trim().isEmpty()) {
+                aux[j] = dato.hashCode();
+                miHash.put(dato.hashCode(), dato);
+            } else {
+                aux[j] = missing.hashCode();
+            }
+        }
+
+        double moda[] = StatUtils.mode(aux);
+        int index = 0;
+        for (int j = 0; j < moda.length; j++) {
+            int key = (int) moda[j];
+            if (key != missing.hashCode()) {
+                valores.addValue(key);
+                String m = String.valueOf(miHash.get(key));
+                index++;
+                cboModa.addItem(m);
+            }
+        }
+    if (index != 0) {
+            int key = (int) valores.getElement(index / 2);
+            String m = String.valueOf(miHash.get(key));
+            txtMediana.setText(m);
+        }
+    }
+
+    private void configurarOrdinal(int i) {
+        btnDistancia.setEnabled(true);
+        btnChiCuadrada.setEnabled(true);
+        btnZscore.setEnabled(false);
+        btnAplicar.setEnabled(true);
+        btnMinMax.setEnabled(false);
+        btnCorrelacion.setEnabled(false);
+        
+        cboFaltantes.addItem("Mediana");
+        cboFaltantes.addItem("Moda");
+        cboFaltantes.addItem("Variable Global");
+
+        miHash = new Hashtable<Integer, Object>();
+        DescriptiveStatistics valores = new DescriptiveStatistics();
+        double aux[] = new double[data.length];
+        for (int j = 0; j < aux.length; j++) {
+            String dato = String.valueOf(data[j][i]);
+            if (!isNumeric(dato) && !dato.trim().isEmpty()) {
+                aux[j] = dato.hashCode();
+                miHash.put(dato.hashCode(), dato);
+            } else {
+                aux[j] = missing.hashCode();
+            }
+        }
+
+        double moda[] = StatUtils.mode(aux);
+        int index = 0;
+        for (int j = 0; j < moda.length; j++) {
+            int key = (int) moda[j];
+            if (key != missing.hashCode()) {
+                valores.addValue(key);
+                String m = String.valueOf(miHash.get(key));
+                index++;
+                cboModa.addItem(m);
+            }
+        }
+        if (index != 0) {
+            int key = (int) valores.getElement(index / 2);
+            String m = String.valueOf(miHash.get(key));
+            txtMediana.setText(m);
+        }
+    }
+
 
     private void btnZscoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZscoreActionPerformed
         txtPanel.setText(zscoreText);
@@ -353,6 +534,153 @@ public class Analizador extends javax.swing.JFrame {
         txtPanel.setText(minmaxText);
     }//GEN-LAST:event_btnMinMaxActionPerformed
 
+    private void correlacionLineal(int i){
+            double[] arreglo2 = new double[data.length];
+            
+            for (int j = 0; j < arreglo2.length; j++) {
+                String dato = String.valueOf(data[j][i]);
+                if (isNumeric(dato)) {
+                    arreglo2[j] = Double.parseDouble(dato);
+                } else {
+                    arreglo2[j] = 0.0;
+                }
+            }
+            
+            PearsonsCorrelation correlacion = new PearsonsCorrelation();
+            String s = "El Coeficiente de Correlación es : "+ correlacion.correlation(arreglo, arreglo2);
+            txtPanel.setText(s);
+    }
+    private void btnCorrelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrelacionActionPerformed
+          int i = cboAnalisis.getSelectedIndex();
+          TipoDato tipo = (TipoDato) columna[i][1];
+ 
+        if (tipo.name().equals("NUMERICO")) {
+            txtPanel.setText("");
+            correlacionLineal(i+1);
+        } else {
+              JOptionPane.showMessageDialog(null,"Atributo No Númerico");
+          }
+    }//GEN-LAST:event_btnCorrelacionActionPerformed
+
+    private void cboAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAnalisisActionPerformed
+      
+    }//GEN-LAST:event_cboAnalisisActionPerformed
+
+    private void llenarTabla(String valor){
+        int j = cboDato.getSelectedIndex();
+        String s = "";
+        for(int i = 0; i < tabla.getRowCount(); i++){
+            s = String.valueOf(tabla.getValueAt(i, j+1));
+            if(s.equals(missing)){
+                  tabla.setValueAt(valor, i, j+1);
+            }
+        }
+    }
+    private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
+       String dato = txtTipo.getText();
+       if(!dato.trim().isEmpty()){
+           if(dato.equals("NUMERICO")){
+               int i = cboFaltantes.getSelectedIndex();
+               String s = "";
+               switch (i){
+                   case 0:
+                       s = txtMedia.getText();
+                       llenarTabla(s);
+                       break;
+                   case 1:
+                       s = txtMediana.getText();
+                       llenarTabla(s);
+                       break;
+                   case 2: 
+                       s = cboModa.getSelectedItem().toString();
+                       llenarTabla(s);
+                       break;
+                   case 3:
+                       s = JOptionPane.showInputDialog(null,"Ingrese Variable global");
+                       if(s!=null && !s.trim().isEmpty()){
+                            llenarTabla(s);
+                       }
+                       break;
+               }
+           }else{
+               int i = cboFaltantes.getSelectedIndex();
+               String s = "";
+               switch (i){
+                    case 0:
+                       s = txtMediana.getText();
+                       llenarTabla(s);
+                       break;
+                   case 1: 
+                       s = cboModa.getSelectedItem().toString();
+                       llenarTabla(s);
+                       break;
+                   case 2:
+                       s = JOptionPane.showInputDialog(null,"Ingrese Variable global");
+                       if(s!=null && !s.trim().isEmpty()){
+                            llenarTabla(s);
+                       }
+                       break;
+               }
+           }
+       }
+    }//GEN-LAST:event_btnAplicarActionPerformed
+    
+     private int minimum(int a, int b, int c) {
+        if(a<=b && a<=c){
+            return a;
+        } 
+        if(b<=a && b<=c){
+            return b;
+        }
+        return c;
+    }
+
+    public int computeLevenshteinDistance(String str1, String str2) {
+        return computeLevenshteinDistance(str1.toCharArray(),
+                                          str2.toCharArray());
+    }
+
+    private int computeLevenshteinDistance(char [] str1, char [] str2) {
+        int [][]distance = new int[str1.length+1][str2.length+1];
+
+        for(int i=0;i<=str1.length;i++){
+                distance[i][0]=i;
+        }
+        for(int j=0;j<=str2.length;j++){
+                distance[0][j]=j;
+        }
+        for(int i=1;i<=str1.length;i++){
+            for(int j=1;j<=str2.length;j++){ 
+                  distance[i][j]= minimum(distance[i-1][j]+1,
+                                        distance[i][j-1]+1,
+                                        distance[i-1][j-1]+
+                                        ((str1[i-1]==str2[j-1])?0:1));
+            }
+        }
+        return distance[str1.length][str2.length];
+        
+    }
+    private void btnDistanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDistanciaActionPerformed
+        int i = cboDato.getSelectedIndex();
+        String dominio = String.valueOf(columna[i][2]);
+        
+        StringTokenizer st = new StringTokenizer(dominio,"(|)");
+        
+        String mensaje = "Distancia Levenshtein : \n";
+        String s = "";
+        String dom = "";
+        int dist =0;
+        while (st.hasMoreElements()){
+            dom = st.nextToken();
+            for(int j = 0; j < data.length; j ++){
+                s = String.valueOf(data[j][i+1]);
+                dist = computeLevenshteinDistance(s, dom);
+                mensaje+="Dato : "+s+"  Dominio : "+dom+" Distancia : "+dist+"\n";
+            }
+        }
+        txtPanel.setText(mensaje);
+    }//GEN-LAST:event_btnDistanciaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAplicar;
@@ -361,6 +689,7 @@ public class Analizador extends javax.swing.JFrame {
     private javax.swing.JButton btnDistancia;
     private javax.swing.JButton btnMinMax;
     private javax.swing.JButton btnZscore;
+    private javax.swing.JComboBox cboAnalisis;
     private javax.swing.JComboBox cboDato;
     private javax.swing.JComboBox cboFaltantes;
     private javax.swing.JComboBox cboModa;
